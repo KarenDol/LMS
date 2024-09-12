@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIS EDU BILIM PORTALY</title>
+    <link rel="icon" type="image/png" href="{% static 'title.png' %}">
+    <link rel="stylesheet" href="{% static 'css/styles_login.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  </head>
+  <body>
+    <div class="logo-container">
+      <img src="{% static 'whitelogo.png' %}" alt="Logo" class="logo-image">
+    </div>
+    <div class="arch-container">
+      <img src="{% static 'arka.png' %}" alt="Arka 1" id="arka1">
+      <img src="{% static 'arka2.png' %}" alt="Arka 2" id="arka2">
+  </div>
+    <section class="container">
+      <div class="image-section">
+        <div class="image-wrapper">
+          <img src="{% static 'mesh-gradient.png' %}" alt="">
+        </div>
+        <div class="content-container">
+          <h1 class="section-heading">Empowering Minds Through Digital <span>Education.</span></h1>
+          <p class="section-paragraph">Every step forward is a step towards knowledge. Embrace the journey.</p>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-wrapper">
+
+          <h2>Welcome</h2>
+          <p>Please enter your credentials to log in</p>
+          <form method="POST" action="{% url 'login_user' %}">
+            {% csrf_token %}
+          <div class="input-container">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" required autocomplete="on">
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required>
+              <i class="toggle-password fas fa-eye-slash" onclick="togglePasswordVisibility()"></i>
+            </div>
+          </div>
+
+          <div class="remember-forgot">
+            <div class="remember-me">
+              <input type="checkbox" value="remember-me" id="remember-me">
+              <label for="remember-me">Remember me</label>
+            </div>
+
+            <a href="#">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="login-btn">Log In</button>
+          </form>
+          <div class="or-divider"></div>
+      </div>
+    </section>
+    <script src="{% static 'js/toggle.js' %}" defer></script>
+  </body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/register_student.css' %}">
+    <title>Регистрация учеников</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <img src="{% static 'student_pic.png' %}">
+        <form id="mainForm" method="POST" action="{% url 'register_student' %}" novalidate>
+            {% csrf_token %}
+            <h2>Регистрация ученика</h2>
+            <div class="form-control">
+                <label for="name">Фамилия</label>
+                <input type="text" id="name" name="lastname" placeholder="Введите фамилию ученика" autocomplete="off">
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control">
+                <label for="name">Имя</label>
+                <input type="text" id="firstname" name="firstname" placeholder="Введите имя ученика" autocomplete="off">
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control">
+                <label for="name">Отчество</label>
+                <input type="text" id="patronim" name="patronim" placeholder="Введите отчество ученика" autocomplete="off">
+                <i class="icon"></i>
+            </div>
+
+            <div class="select-menu" >
+                <div class="select-btn">
+                    <span class="sBtn-text">Выберите класс</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <ul class="options">
+                    {% for option in Grades %}
+                    <li class="option">
+                        <span class="option-text">{{ option }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <input type="hidden" name="grade" id="selectedClassInput">
+
+            <div class="form-control">
+                <label for="birthdate">Дата Рождения</label>
+                <input type="date" id="birthdate" name="birthdate" placeholder="Дата рождения ученика">
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control">
+                <label for="iin">ИИН</label>
+                <input type="tel" id="iin" name="IIN" inputmode="numeric" placeholder="ИИН ученика (12 символов)" maxlength="12" autocomplete="off">
+                <i class="icon"></i>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const iinInput = document.getElementById('iin');
+
+                    iinInput.addEventListener('keypress', function (event) {
+                        const charCode = event.which ? event.which : event.keyCode;
+                        if (charCode < 48 || charCode > 57) {
+                            event.preventDefault();
+                        }
+                    });
+                });
+            </script>
+
+            <div class="form-control">
+                <label for="phone">Номер Телефона</label>
+                <input type="tel" id="phone" name="phone" placeholder="+7(000)000-00-00" autocomplete="off">
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control">
+                <label for="nationality">Национальность</label>
+                <input type="text" id="nationality" name="nationality" placeholder="Национальность ученика" autocomplete="off">
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control">
+                <label for="prev_school">С какой школы перевелся</label>
+                <input type="text" id="prev_school" name="prev_school" placeholder="Предыдущая школа ученика" autocomplete="off">
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control">
+                <label for="message">Комментарий</label>
+                <textarea id="message" name="comment" rows="4" placeholder="Информация об ученике"></textarea>
+                <i class="icon"></i>
+            </div>
+
+            <button type="submit">Добавить Ученика</button>
+        </form>
+    </div>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Success!</h2>
+            <p>Ваша форма была успешно отправлена.</p>
+        </div>
+    </div>
+
+    <script src="{% static 'js/register_student.js' %}"></script>
+    <script src="https://unpkg.com/imask"></script>
+</body>
+</html>

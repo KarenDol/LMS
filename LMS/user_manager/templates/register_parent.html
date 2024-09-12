@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles_parent.css' %}">
+    <title>Регистрация родителей</title>
+</head>
+
+<body>
+    <div class="container">
+        <img src="{% static 'parent_pic.jpg' %}">
+        <form method="POST" action="{% url 'register_parent' IIN=IIN %}" id="mainForm" novalidate>
+            {% csrf_token %}
+            <h2>Регистрация родителя</h2>
+            <div class="form-control">
+                <label for="name">Фамилия</label>
+                <input type="text" id="name" name="lastname" placeholder="Введите фамилию родителя" autocomplete="off">
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control">
+                <label for="name">Имя</label>
+                <input type="text" id="firstname" name="firstname" placeholder="Введите имя родителя" autocomplete="off">
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control">
+                <label for="patronim">Отчество</label>
+                <input type="text" id="patronim" name="patronim" placeholder="Введите имя родителя" autocomplete="off">
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control">
+                <label for="phone">Номер родителя</label>
+                <input type="tel" id="phone" name="phone" placeholder="+7(000)000-00-00" autocomplete="off">
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control">
+                <label for="birthdate">Дата выдачи документа</label>
+                <input type="date" id="birthdate" name="ID_date">
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control">
+                <label for="iin">Номер удостоверения</label>
+                <input type="tel" id="iin" name="ID_number" inputmode="numeric" placeholder="Номер удостоверения (7 символов)" maxlength="7" autocomplete="off">
+                <i class="icon"></i>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const iinInput = document.getElementById('iin');
+            
+                    iinInput.addEventListener('keypress', function (event) {
+                        const charCode = event.which ? event.which : event.keyCode;
+                        if (charCode < 48 || charCode > 57) {
+                            event.preventDefault();
+                        }
+                    });
+                });
+            </script>
+
+            <div class="form-control">
+                <label for="mvd">Кем был выдан</label>
+                <input type="text" id="mvd" name="ID_org" value="МВД РК" autocomplete="off">
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control">
+                <label for="workplace">Место работы</label>
+                <input type="text" id="workplace" name="workplace" placeholder="Место работы родителя" autocomplete="off">
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control">
+                <label for="position">Должность</label>
+                <input type="text" id="position" name="position" placeholder="Занимаемая должность" autocomplete="off">
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control">
+                <label for="position">Адрес Проживания</label>
+                <input type="text" id="address" name="address" placeholder="ул. Ораза Татеулы 13А" autocomplete="off">
+                <i class="icon"></i>
+            </div>
+
+            <button type="submit">Отправить</button>
+        </form>
+    </div>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Success!</h2>
+            <p>Ваша форма была успешно отправлена.</p>
+        </div>
+    </div>
+
+
+    <script src="{% static 'js/script_parent.js' %}"></script>
+    <script src="https://unpkg.com/imask"></script>
+</body>
+</html>

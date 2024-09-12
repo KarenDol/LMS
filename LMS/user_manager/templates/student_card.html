@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/student_card.css' %}">
+    <title>Карточка Ученика</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <img src="{% static 'student_pic.png' %}">
+        <form id="mainForm">
+            {% csrf_token %}
+            <h2>Карточка Ученика</h2>
+
+            <div class="button-group">
+                {% if student.contract.status == 'НеПод' %}
+                  <button  class="sign-button">
+                    <a href="{% url 'sign_doc' IIN=student.IIN %}" target="_blank">📝 Договор</a>
+                  </button>
+                {% else %}
+                  <button  class="view-button" onclick="window.location.href='{% static ''%}{{student.contract.location}}'">
+                    📝 Договор
+                  </button>
+                {% endif %}
+                <button  class="parent-button" name="action" value="approve">👩‍👧‍👦 Карточка Родителя</button>
+            </div>
+
+            <div class="form-control">
+                <label for="Last_name">Фамилия</label>
+                <div id="Last_Name" class="input-div" contenteditable="false">{{ student.Last_Name }}</div>
+            </div>
+
+            <div class="form-control">
+                <label for="First_Name">Имя</label>
+                <div id="First_Name" class="input-div" contenteditable="false">{{ student.First_Name }}</div>
+            </div>
+
+            <div class="form-control">
+                <label for="Patronim">Отчество</label>
+                <div id="Patronim" class="input-div" contenteditable="false">{{ student.Patronim }}</div>
+            </div>
+
+            <div class="select-menu" >
+                <label for="grade">Класс Обучения</label>
+                <div id="grade" class="input-div" contenteditable="false">{{ student.grade }}</div>
+            </div>
+
+            <div class="form-control">
+                <label for="birthdate">Дата Рождения</label>
+                <div id="birthdate" class="input-div" contenteditable="false">{{ student.birthdate }}</div>
+            </div>
+
+            <div class="form-control">
+                <label for="IIN">ИИН</label>
+                <div id="IIN" class="input-div" contenteditable="false">{{ student.IIN }}</div>
+            </div>
+
+            <div class="form-control">
+                <label for="phone">Номер Телефона</label>
+                <div id="phone" class="input-div" contenteditable="false">{{ student.phone }}</div>
+            </div>
+
+            <div class="form-control">
+                <label for="nationality">Национальность</label>
+                <div id="nationality" class="input-div" contenteditable="false">{{ student.nationality }}</div>
+            </div>
+
+            <div class="form-control">
+                <label for="prev_school">С какой школы перевелся</label>
+                <div id="prev_school" class="input-div" contenteditable="false">{{ student.prev_school }}</div>
+            </div>
+
+            <div class="form-control">
+                <label for="comment">Комментарий</label>
+                <div id="comment" class="input-div" contenteditable="false">{{ student.comment }}</div>
+            </div>
+        </form>
+    </div>
+
+    <script src="{% static 'js/script_student.js' %}"></script>
+    <script src="https://unpkg.com/imask"></script>
+</body>
+</html>

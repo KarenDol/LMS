@@ -1,0 +1,69 @@
+:root {
+    --white: #F7F8E2;
+    --primary: #F57B51;
+    --dark: #9CCD62;
+}
+
+header {
+    background-color: #572B79;
+    color: var(--white);
+    display: flex;
+    padding: 5px;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    justify-content: space-between;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.AIS{
+    position: left;
+    margin-left: 10%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.AIS .AIS-Text{
+    text-align: left;
+    position: right;
+}
+
+.AIS .AIS-Logo{
+    margin-right: 10px;
+}
+
+.AIS-Text p{
+    margin: 0px;
+}
+
+.AIS-Logo img{
+    height: 50px;
+    width: auto;
+    margin-top: 5px;
+}
+
+a{
+    color: var(--white);
+    text-decoration: none;
+}
+
+.Person{
+    position: right;
+    margin-right: 10%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.Person .Avatar img{
+    border-radius: 50%;
+    height: 30px;
+    width: auto;
+    margin-left: 10px;
+}

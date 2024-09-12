@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles_contract.css' %}">
+    <title>Регистрация договора</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <img src="{% static 'dogovor_pic.jpg' %}">
+        <form method="POST" action="{% url 'register_contract' IIN=IIN %}" id="mainForm" novalidate>
+            {% csrf_token %}
+            <h2>Регистрация договора</h2>
+
+            <div class="form-control">
+                <label for="birthdate">День подписания</label>
+                <input type="date" id="birthdate" name="sign_date" value={{today}}>
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control">
+                <label for="birthdate">Вступает в силу с</label>
+                <input type="date" id="birthdate" name="first_date" value="2024-09-01">
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control">
+                <label for="birthdate">Действует до</label>
+                <input type="date" id="birthdate" name="last_date" value="2025-05-25">
+                <i class="icon"></i>
+            </div>
+
+            <div class="form-control" id="cost">
+                <label for="fullcost">Полная сумма</label>
+                    <span class="currency-code">₸</span>
+                    <input type="text" id="fullcost" name="total" value="1665000">
+                    <i class="icon"></i>
+            </div>
+
+            <div class="form-control" id="cost">
+                <label for="fullcost">Сумма с учетом скидки</label>
+                    <span class="currency-code">₸</span>
+                    <input type="text" id="discount" name="discount" autocomplete="off">
+                    <i class="icon"></i>
+            </div>
+
+            <div class="form-control" id="cost">
+                <label for="fullcost">Оплата в месяц</label>
+                    <span class="currency-code">₸</span>
+                    <input type="text" id="monthly" name="monthly" autocomplete="off">
+                    <i class="icon"></i>
+            </div>
+
+            <div class="form-control" id="cost">
+                <label for="fullcost">Вступительный взнос</label>
+                    <span class="currency-code">₸</span>
+                    <input type="text" id="joinfee" name="join_fee" value="150000">
+                    <i class="icon"></i>
+            </div>
+
+            <button type="submit">Отправить</button>
+
+        </form>
+    </div>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Success!</h2>
+            <p>Ваша форма была успешно отправлена.</p>
+        </div>
+    </div>
+
+
+    <script src="{% static 'js/script_contract.js' %}"></script>
+    <script src="https://unpkg.com/imask"></script>
+</body>
+</html>
