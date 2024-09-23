@@ -28,7 +28,12 @@ class Contract(models.Model):
     discount = models.IntegerField() #С учетом льгот и скидок
     monthly = models.IntegerField() #Ежемесячная оплата
     join_fee = models.IntegerField() #Вступительные
-    location = models.CharField(max_length=150) #Location of file
+    join_fee_status = models.CharField(max_length=15, choices=[
+        ('Не Оплачено', 'Не Оплачено'),
+        ('Оплачено', 'Оплачено')
+    ], default='Не Оплачено')
+    template_location = models.CharField(max_length=150) #Location of template file
+    signed_location = models.CharField(max_length=150, null=True) #Location of the signed doc
     status = models.CharField(max_length=50, choices=[
         ('Под', 'Подписан'),
         ('НеПод', 'Не подписан'),
@@ -53,16 +58,20 @@ class Student(models.Model):
     phone = models.CharField(max_length=20, null=True)
     comment = models.CharField(max_length=200, null=True)
 
-class Curator(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    curator_class1 = models.CharField(max_length=2, blank=True, null=True)
-    curator_class2 = models.CharField(max_length=2, blank=True, null=True)
-    curator_class3 = models.CharField(max_length=2, blank=True, null=True)
-
-class Admin(models.Model):
+class LMS_User(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=150)
-    picture = models.CharField(max_length=150, null=True)
+    picture = models.CharField(max_length=150, default='Avatar.png') #user_picture
+    user_type = models.CharField(max_length=50, choices=[
+        ('Админ', 'Администрация'),
+        ('Бух', 'Бухгалтер'),
+        ('ВнСв', 'Зам по ВСиРШ'),
+        ('Дело', 'Делопроизводитель'),
+        ('Дир', 'Директор'),
+        ('Кур', 'Куратор'),
+    ], default='Админ')
+    phone = models.CharField(max_length=20, null=True)
+    email = models.CharField(max_length=100, null=True)
 
 class List_Of_Students(models.Model):
     student = models.OneToOneField(Student, on_delete=models.CASCADE)

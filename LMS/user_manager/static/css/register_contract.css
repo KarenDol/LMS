@@ -8,17 +8,17 @@
 
 body{
     background: url(/static/bg.jpg) no-repeat center/cover;
-    display: flex;
     align-items: center;
     justify-content: center;
-    padding: 50px 50px;
 }
+
 .container{
+    margin: 20px auto;
     display: flex;
     gap: 45px;
     background-color: #fff;
     width: 100%;
-    max-width: 1060px;
+    min-width: 900px;
     padding: 45px;
     border-radius: 10px;
     box-shadow: 10px 10px 30px rgba(255, 255, 255, 0.1);
@@ -30,7 +30,7 @@ body{
     object-fit: cover;
 }
 
-.container form{
+.container {
     width: 50%;
 }
 

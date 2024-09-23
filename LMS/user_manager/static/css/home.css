@@ -25,7 +25,8 @@ main.table {
     justify-content: center;
     align-items: center;
     margin: 0 auto;
-    margin-top: 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 
     backdrop-filter: blur(7px);
     box-shadow: 0 .4rem .8rem #0005;
@@ -238,9 +239,9 @@ thead th.active,tbody td.active {
     color: #b30021;
 }
 
-a {
-  text-decoration: none;
-  color: #000000;
+.table__body a {
+    text-decoration: none;
+    color: #000000;
 }
 
 .table__header p {

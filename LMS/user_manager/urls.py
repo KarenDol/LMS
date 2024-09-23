@@ -26,9 +26,9 @@ urlpatterns = [
     path('delete_student/<int:pk>/', views.delete_student, name='delete_student'),
     # path('reset_password/<int:pk>', views.reset_password, name='reset_password'),
     path('student/<IIN>/', views.student, name='student'),
+    path('contract/<IIN>/', views.contract, name='contract'),
     path('sign_doc/<IIN>/', views.sign_doc, name='sign_doc'),
-    path('success2/', views.success2, name='success2'),
-    path('qate/', views.qate, name='qate'),
     path('finance/', views.finance, name='finance'),
     path('cash/<int:entr_id>/', views.cash, name='cash'),
+    path('user_settings', views.user_settings, name='user_settings'),
 ]

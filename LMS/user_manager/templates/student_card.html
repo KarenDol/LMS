@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'index.html' %}
+{% block content %}
 {% load static %}
 
 <head>
@@ -7,24 +7,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/student_card.css' %}">
+    <link rel="icon" href="{% static 'favicon.png' %}">
     <title>Карточка Ученика</title>
 </head>
 
 <body>
-
     <div class="container">
         <img src="{% static 'student_pic.png' %}">
-        <form id="mainForm">
-            {% csrf_token %}
+        <div class="student_info">
             <h2>Карточка Ученика</h2>
 
             <div class="button-group">
                 {% if student.contract.status == 'НеПод' %}
-                  <button  class="sign-button">
-                    <a href="{% url 'sign_doc' IIN=student.IIN %}" target="_blank">📝 Договор</a>
+                  <button  class="sign-button" onclick="window.location.href='{% url 'contract' IIN=student.IIN %}'">
+                    📝 Договор
                   </button>
                 {% else %}
-                  <button  class="view-button" onclick="window.location.href='{% static ''%}{{student.contract.location}}'">
+                  <button  class="view-button" onclick="window.location.href='{% url 'contract' IIN=student.IIN %}'">
                     📝 Договор
                   </button>
                 {% endif %}
@@ -86,4 +85,4 @@
     <script src="{% static 'js/script_student.js' %}"></script>
     <script src="https://unpkg.com/imask"></script>
 </body>
-</html>
+{% endblock content %}

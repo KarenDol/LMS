@@ -1,0 +1,84 @@
+{% extends 'index.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/contract_card.css' %}">
+    <link rel="icon" href="{% static 'favicon.png' %}">
+    <title>Регистрация договора</title>
+</head>
+
+<body>
+    <div class="container">
+        <img src="{% static 'dogovor_pic.jpg' %}">
+        <div  class="contract-info">
+            <h2>Договор</h2>
+
+            <div class="form-control">
+                <label>День Подписания</label>
+                <div class="input-div" contenteditable="false">{{ contract.sign_date }}</div>
+            </div>
+
+            <div class="form-control">
+                <label>Действует</label>
+                <div class="input-div" contenteditable="false">
+                    С {{ contract.first_date }} - По {{ contract.last_date }}
+                </div>
+            </div>
+
+            <div class="form-control">
+                <label for=>Сумма Договора</label>
+                <div class="input-div" contenteditable="false">₸ {{ contract.discount }}</div>
+            </div>
+
+            <div class="form-control">
+                <label for=>Ежемесячная Оплата</label>
+                <div class="input-div" contenteditable="false">₸ {{ contract.monthly }}</div>
+            </div>
+
+            <div class="form-control">
+                <div class="label-status">
+                    <label>Вступительный взнос</label>
+                    {% if contract.join_fee_status == 'Оплачено' %}
+                        <p class="positive">Оплачено</p>
+                    {% else %}
+                        <p class="negative">Не оплачено</p>
+                    {% endif %}
+                </div>
+                <div class="input-div" contenteditable="false">₸ {{ contract.join_fee }}</div>
+            </div>
+
+            <div class="form-control">
+                <div class="label-status">
+                    <label>Договор</label>
+                    {% if contract.status == 'Под' %}
+                        <p class="positive">Подписан</p>
+                    {% else %}
+                        <p class="negative">Не подписан</p>
+                    {% endif %}
+                </div>
+                <div class="input-div-word">
+                    <img class='icon-w' src="{% static 'Word_icon.png' %}">
+                    <a href="{% static dogovor %}" download><p>Договор.docx</p></a>
+                </div>
+                {% if contract.status == 'Под' %}
+                <div class="input-div-pdf">
+                    <img class='icon-p' src="{% static 'PDF_icon.png' %}">
+                    <a href="{% static dogovor %}" download><p>Договор.pdf</p></a>
+                </div>
+                {% endif %}
+
+            </div>
+
+            {% if contract.status == 'НеПод' %}
+                <button onclick="window.location.href='{% url 'sign_doc' IIN=IIN %}'">Подписать Договор</button>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="{% static 'js/script_contract.js' %}"></script>
+    <script src="https://unpkg.com/imask"></script>
+</body>
+{% endblock content %}

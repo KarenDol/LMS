@@ -6,21 +6,36 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="icon" href="{% static 'favicon.png' %}">
 </head>
 <body>
     <header>
             <div class="AIS">
-                <div class="AIS-Logo"><img src="{% static 'whitelogo.png' %}"></div>
+                <img src="{% static 'whitelogo.png' %}">
                 <div class="AIS-Text">
                     <p><a href="{% url 'home' %}"><b>AQBOBEK INTERNATIONAL SCHOOL</b></a></p>
                     <p>Learning Management System</p>
                 </div>
             </div>
             <div class="Person">
-                <div class="Name">{{ name }}</div>
-                <div class="Avatar"><img src="{% static picture %}"></div>
+                <p>{{ name }}</p>
+                <a href="{% url 'user_settings' %}">
+                    <img src="{% static picture %}" id="profilePicture">
+                </a>
             </div>
     </header>
+    <script>
+        const profilePicture = document.getElementById('profilePicture');
+
+        setInterval(() => {
+            profilePicture.src = "{% static 'Gear.jpg' %}";
+            profilePicture.classList.add('spin'); 
+            setTimeout(() => {
+                profilePicture.classList.remove('spin');
+                profilePicture.src = "{% static picture %}";
+            }, 2000); // Wait for the spin animation to finish (1 second)
+        }, 10000); // Repeat every 10 seconds
+    </script>
     {% block content %}
     {% endblock %}
 </body>

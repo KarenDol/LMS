@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-rkl5=ijxgq1r#wvkvu7u0qgh&b5aq-i1w9*ph%n^_)+3qzt4cm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['lms.a1s.kz']
+ALLOWED_HOSTS = ['lms.a1s.kz', 'localhost']
 
 
 # Application definition
@@ -78,8 +78,8 @@ WSGI_APPLICATION = "LMS.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "AIS_LMS",
-        "USER": "admin",
+        "NAME": "AIS",
+        "USER": "root",
         "PASSWORD": "banana228",
         "HOST": "localhost",
         "PORT": "3306",

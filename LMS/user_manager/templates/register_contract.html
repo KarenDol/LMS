@@ -1,12 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'index.html' %}
+{% block content %}
 {% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/styles_contract.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register_contract.css' %}">
     <title>Регистрация договора</title>
+    <link rel="icon" href="{% static 'favicon.png' %}">
 </head>
 
 <body>
@@ -15,7 +16,7 @@
         <img src="{% static 'dogovor_pic.jpg' %}">
         <form method="POST" action="{% url 'register_contract' IIN=IIN %}" id="mainForm" novalidate>
             {% csrf_token %}
-            <h2>Регистрация договора</h2>
+            <h2>Регистрация Договора</h2>
 
             <div class="form-control">
                 <label for="birthdate">День подписания</label>
@@ -80,4 +81,4 @@
     <script src="{% static 'js/script_contract.js' %}"></script>
     <script src="https://unpkg.com/imask"></script>
 </body>
-</html>
+{% endblock content %}
