@@ -13,13 +13,15 @@ from .dogovor import fill_doc
 from .const import Grades, Grades_dict, Grades_home, User_type_dict
 import json
 import os
+import json
+from django.http import JsonResponse
 
 # Create your views here.
 def home(request):
     if request.user.is_authenticated:
         try:
             current_user = LMS_User.objects.get(user=request.user)
-            students = list(Student.objects.all().values('Last_Name', 'First_Name', 'Patronim', 'IIN', 'phone', 'grade'))
+            students = list(Student.objects.all().values('Last_Name', 'First_Name', 'Patronim', 'IIN', 'phone', 'grade', 'status'))
             students_json = json.dumps(students)
             Grades_dict_json = json.dumps(Grades_dict)
             return render(request, 'home.html', {'Grades_dict': Grades_dict_json, 'role': 'admin', 'students_1': students_json, 'Grades': Grades_home, 'picture': current_user.picture, 'name': current_user.name})
@@ -144,6 +146,7 @@ def register_contract(request, IIN):
                                     template_location='dogovor' + str(numb) + '.pdf')
                     new_contract.save()
                     new_student.contract = new_contract
+                    new_student.status = 'Акт'
                     new_student.save()
                     fill_doc(IIN)
                     return redirect('sign_doc')
@@ -205,6 +208,16 @@ def student(request, IIN):
         current_user = LMS_User.objects.get(user=request.user)
         student = Student.objects.get(IIN=IIN)
         return render(request, 'student_card.html', {'student': student, 'picture': current_user.picture, 'name': current_user.name})
+    else:
+        messages.success(request, "You Must Be Logged In To View The Card")
+        return redirect('login')
+
+def parent_card(request, IIN):
+    if request.user.is_authenticated:
+        current_user = LMS_User.objects.get(user=request.user)
+        student = Student.objects.get(IIN=IIN)
+        parent = student.parent_1
+        return render(request, 'parent_card.html', {'parent': parent, 'picture': current_user.picture, 'name': current_user.name})
     else:
         messages.success(request, "You Must Be Logged In To View The Card")
         return redirect('login')
@@ -296,11 +309,58 @@ def cash(request, entr_id):
 
 def user_settings(request):
     if request.user.is_authenticated:
-        LMS_user = LMS_User.objects.get(user=request.user)
-        user_dict = model_to_dict(LMS_user, fields=['name', 'phone', 'email', 'picture'])
-        user_dict['position'] = User_type_dict[LMS_user.user_type]
-        user_dict['username'] = LMS_user.user.username
-        print(user_dict)
-        return render(request, 'user_settings.html', {'user_dict': user_dict, })
+        current_user = LMS_User.objects.get(user=request.user)
+        if request.method == "POST":
+            try:
+                new_username = request.POST['username']
+                if new_username and new_username != current_user.user.username:
+                    current_user.user.username = new_username
+                    current_user.user.save()
+                
+                oldPassword = request.POST['oldPassword']
+                newPassword = request.POST['newPassword']
+                if oldPassword:
+                    user = authenticate(username = request.user.username, password = oldPassword)
+                    print(request.user.username, oldPassword)
+                    if user is not None:
+                        user.set_password(newPassword)
+                        user.save()
+                    else:
+                        print("WrongPassword")
+                
+                new_email = request.POST['email']
+                if new_email and new_email != current_user.email:
+                    current_user.email = new_email
+                
+                new_phone = request.POST['phone']
+                if new_phone and new_phone != current_user.phone:
+                    current_user.phone = new_phone
+
+                if 'avatar' in request.FILES:
+                    new_avatar = request.FILES['avatar']
+                    folder_path = os.path.join(settings.BASE_DIR, 'user_manager', 'static', 'avatars')
+                    print(folder_path)
+
+                    fs = FileSystemStorage(folder_path)
+                    fs.save(new_avatar.name, new_avatar)
+
+
+                    current_user.picture = os.path.join('avatars', new_avatar.name)
+                
+                current_user.save()
+                
+                
+                
+                # Send success response
+                return JsonResponse({'status': 'success', 'message': 'Settings updated successfully'}, status=200)
+            except Exception as e:
+                # Handle exceptions and return an error response
+                print(f"Error occurred: {e}")
+                return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+        else:
+            user_dict = model_to_dict(current_user, fields=['name', 'phone', 'email', 'picture'])
+            user_dict['position'] = User_type_dict[current_user.user_type]
+            user_dict['username'] = current_user.user.username
+            return render(request, 'user_settings.html', {'user_dict': user_dict})
     else:
         return redirect('login')

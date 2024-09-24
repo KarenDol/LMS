@@ -18,16 +18,33 @@
             <h2>Карточка Ученика</h2>
 
             <div class="button-group">
-                {% if student.contract.status == 'НеПод' %}
-                  <button  class="sign-button" onclick="window.location.href='{% url 'contract' IIN=student.IIN %}'">
-                    📝 Договор
-                  </button>
+                {% if student.parent_1 == None %}
+                    <button  class="sign-button" onclick="window.location.href='{% url 'register_contract' IIN=student.IIN %}'" disabled>
+                      📝 Заполнить Договор
+                    </button>
+                    <button  class="sign-button" onclick="window.location.href='{% url 'register_parent' IIN=student.IIN %}'">
+                        👩‍👧‍👦 Добавить Родителя
+                    </button>
                 {% else %}
-                  <button  class="view-button" onclick="window.location.href='{% url 'contract' IIN=student.IIN %}'">
-                    📝 Договор
-                  </button>
+                    {% if student.contract != None %}
+                        {% if student.contract.status == 'НеПод' %}
+                            <button  class="sign-button" onclick="window.location.href='{% url 'contract' IIN=student.IIN %}'">
+                                📝 Договор
+                            </button>
+                        {% else %}
+                            <button  class="view-button" onclick="window.location.href='{% url 'contract' IIN=student.IIN %}'">
+                                📝 Договор
+                            </button>
+                        {% endif %}
+                    {% else %}
+                        <button  class="sign-button" onclick="window.location.href='{% url 'register_contract' IIN=student.IIN %}'">
+                            📝 Заполнить Договор
+                        </button>
+                    {% endif %}
+                    <button  class="parent-button" onclick="window.location.href='{% url 'parent_card' IIN=student.IIN %}'">
+                        👩‍👧‍👦 Карточка Родителя
+                    </button>
                 {% endif %}
-                <button  class="parent-button" name="action" value="approve">👩‍👧‍👦 Карточка Родителя</button>
             </div>
 
             <div class="form-control">

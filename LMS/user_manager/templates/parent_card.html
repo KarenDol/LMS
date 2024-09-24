@@ -1,0 +1,52 @@
+{% extends 'index.html' %}
+{% block content %}
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/parent_card.css' %}">
+    <link rel="icon" href="{% static 'favicon.png' %}">
+    <title>Карточка Родителя</title>
+</head>
+
+<body>
+    <div class="container">
+        <img src="{% static 'parent_pic.jpg' %}">
+        <div class="parent_info">
+            <h2>Карточка Родителя</h2>
+
+            <div class="form-control">
+                <label for="Last_name">Фамилия</label>
+                <div id="Last_Name" class="input-div" contenteditable="false">{{ parent.Last_Name }}</div>
+            </div>
+
+            <div class="form-control">
+                <label for="First_Name">Имя</label>
+                <div id="First_Name" class="input-div" contenteditable="false">{{ parent.First_Name }}</div>
+            </div>
+
+            <div class="form-control">
+                <label for="Patronim">Отчество</label>
+                <div id="Patronim" class="input-div" contenteditable="false">{{ parent.Patronim }}</div>
+            </div>
+
+            <div class="form-control">
+                <label for="phone">Номер Телефона</label>
+                <div id="phone" class="input-div" contenteditable="false">{{ parent.Phone }}</div>
+            </div>
+
+            <div class="form-control">
+                <label for="workplace">Место работы</label>
+                <div id="workplace" class="input-div" contenteditable="false">{{ parent.Working_Place }}</div>
+            </div>
+
+            <div class="form-control">
+                <label for="position">Должность</label>
+                <div id="position" class="input-div" contenteditable="false">{{ parent.Position }}</div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock content %}

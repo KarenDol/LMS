@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from .const import Grades_models
+from .const import Grades_models, student_status
 
 #Create your models here.
 class Parent(models.Model):
@@ -51,6 +51,7 @@ class Student(models.Model):
     parent_1 = models.ForeignKey(Parent, on_delete=models.CASCADE, null=True, related_name='mom')
     # parent_2 = models.ForeignKey(Parent, on_delete=models.CASCADE, null=True, related_name='dad')
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE, null=True)
+    status = models.CharField(max_length=30, choices=student_status, default='Лид')
 
     #not crucial
     nationality = models.CharField(max_length=20, null=True)

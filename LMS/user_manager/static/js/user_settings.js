@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
         originalData.avatarSrc = userData.avatarSrc;
     }
 
+    // проверка изменений в форме
     function checkFormChanged() {
         const hasChanges = Object.keys(originalData).some(key => {
             if (key === 'avatarSrc') {
@@ -46,8 +47,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const input = document.getElementById(key);
             return input && input.value !== originalData[key];
         }) || document.getElementById('old-password').value || document.getElementById('new-password').value;
-        
-        actionButtons.style.display = hasChanges ? 'flex' : 'none';
+
+
+        // если есть изменения, сбросить и сохранить
+        resetButton.disabled = !hasChanges;
+        saveButton.disabled = !hasChanges;
     }
 
     function updateOriginalData() {
@@ -99,20 +103,39 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('input', checkFormChanged);
 
     form.addEventListener('submit', function(e) {
+        console.log("Форма Успешно Отправлена");
         e.preventDefault();
-        // здесь отправляются данные на сервер (console log убрать в дальнейшем)
-        console.log('Форма отправлена со следующими данными:');
-        console.log({
-            username: document.getElementById('username').value,
-            email: document.getElementById('email').value,
-            birthdate: document.getElementById('birthdate').value,
-            oldPassword: document.getElementById('old-password').value,
-            newPassword: document.getElementById('new-password').value,
-            avatarSrc: avatarImage.src
-        });
+        const formData = new FormData();
+        
+        formData.append('username', document.getElementById('username').value);
+        formData.append('email', document.getElementById('email').value);
+        formData.append('phone', document.getElementById('phone').value);
+        formData.append('oldPassword', document.getElementById('old-password').value);
+        formData.append('newPassword', document.getElementById('new-password').value);
+
+        const file = fileInput.files[0];
+        if (file) {
+            console.log(file.name);
+            formData.append('avatar', file);
+        }
+
+        fetch('/user_settings/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value // CSRF token for security
+            },
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                // Redirect on success
+                window.location.href = '/user_settings/';
+            } else {
+                console.error('Error submitting form:', response.statusText);
+                alert('An error occurred while updating settings. Please try again.');
+            }
+        })
         // после успешной отправки обновляем ориг данные
-        updateOriginalData();
-        actionButtons.style.display = 'none';
     });
 
     resetButton.addEventListener('click', function() {
@@ -154,23 +177,4 @@ document.addEventListener('DOMContentLoaded', function() {
             reader.readAsDataURL(file);
         }
     });
-
-    function uploadAvatar(file) {
-        const formData = new FormData();
-        formData.append('avatar', file);
-
-        fetch('/upload-avatar', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Аватар успешно загружен:', data);
-            // здесь можно добавить обработку ответа от сервера
-        })
-        .catch(error => {
-            console.error('Ошибка при загрузке аватара:', error);
-            // здесь можно добавить обработку ошибки
-        });
-    }
 });

@@ -59,8 +59,9 @@ a{
 .Person img{
     border-radius: 50%;
     height: 40px;
-    width: auto;
+    width: 40px;
     margin-left: 10px;
+    object-fit: cover;
 }
 
 
