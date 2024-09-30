@@ -18,7 +18,7 @@ body{
     gap: 45px;
     background-color: #fff;
     width: 100%;
-    max-width: 1060px;
+    max-width: 960px;
     padding: 45px;
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -30,13 +30,12 @@ body{
     object-fit: cover;
 }
 
-.container form{
+.container .parent_info{
     width: 50%;
 }
 
-form h2{
+.parent_info h2{
     text-align: center;
-    margin-bottom: 30px;
     color: #100629;
     font-size: 30px;
 }
@@ -173,98 +172,14 @@ button:hover{
     cursor: pointer;
 }
 
-
-.select-menu {
-    position: relative;
+.input-div {
     width: 100%;
-    margin: 20px auto;
-}
-.select-menu .options-container {
-    overflow-y: auto; /* Включение вертикальной прокрутки */
-    border: 1px solid #ddd; /* Добавление рамки для контейнера */
-    border-radius: 8px;
-}
-.select-menu .select-btn {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 42px;
-    padding: 0 15px;
-    background-color: #fff;
-    border-radius: 8px;
-    border: 2px solid #ddd;
-    cursor: pointer;
-    font-size: 14px;
-    transition: border 0.3s;
-}
-
-.select-menu .select-btn i {
-    font-size: 12px;
-    transition: transform 0.5s;
-}
-.select-menu.active .select-btn i {
-    transform: rotate(-180deg);
-}
-.select-menu .options {
-    max-height: 250px;
-    overflow-y: auto;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    margin-top: 10px;
     padding: 10px;
-    border-radius: 8px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.247);
-    display: none;
-    z-index: 1000;
-}
-
-.select-menu.active .options {
-    display: block;
-}
-
-.select-menu .options .option {
-    display: flex;
-    align-items: center;
-    height: 40px;
-    padding: 0 16px;
-    cursor: pointer;
-    border-radius: 8px;
-    background-color: #fff;
-    transition: background-color 0.3s;
-}
-
-.select-menu .options .option:hover {
-    background-color: #f2f2f2;
-}
-
-.select-menu .options .option i {
-    font-size: 25px;
-    margin-right: 12px;
-}
-
-.select-menu .options .option .option-text {
-    font-size: 14px;
-    color: #333;
-}
-
-select {
-    display: none;
-}
-textarea {
-    resize: vertical; /* Разрешить изменение размера только по горизонтали */
-}
-@media screen and (max-width: 920px) {
-
-    .container img{
-        display: none;
-    }
-
-    .container form{
-        width: 100%;
-    }
-
+    padding-right: 40px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    transition: border 0.3s;
+    font-size: 1rem;
+    background-color: #5050500c;
 }

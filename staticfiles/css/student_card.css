@@ -8,18 +8,17 @@
 
 body{
     background-color: #dcdcdc;
-    display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px 20px;
 }
 
 .container{
+    margin: 20px auto;
     display: flex;
     gap: 45px;
     background-color: #fff;
     width: 100%;
-    max-width: 1060px;
+    max-width: 960px;
     padding: 45px;
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -31,11 +30,11 @@ body{
     object-fit: cover;
 }
 
-.container form{
+.container .student_info{
     width: 50%;
 }
 
-form h2{
+.student_info h2{
     text-align: center;
     color: #100629;
     font-size: 30px;
@@ -244,4 +243,3 @@ a {
   text-decoration: none;
   color: #ffffff;
 }
-

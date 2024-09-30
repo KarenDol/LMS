@@ -42,7 +42,8 @@
         <button type="submit">Отправить</button></form>
     </div>
     <script>
-        var IIN = {{ IIN }};
+        var IIN = "{{ IIN }}";
+        console.log(IIN);
         var staticUrl = "{% static 'PDF File.png' %}";
     </script>
 <script src="{% static 'js/sign_doc.js'%}"></script>

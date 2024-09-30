@@ -26,7 +26,7 @@ def home(request):
             Grades_dict_json = json.dumps(Grades_dict)
             return render(request, 'home.html', {'Grades_dict': Grades_dict_json, 'role': 'admin', 'students_1': students_json, 'Grades': Grades_home, 'picture': current_user.picture, 'name': current_user.name})
         except LMS_User.DoesNotExist:
-            return redirect('logout_user')
+            return redirect('logout')
 
     else:
         messages.success(request, "Login in to access that page")
@@ -149,7 +149,7 @@ def register_contract(request, IIN):
                     new_student.status = 'Акт'
                     new_student.save()
                     fill_doc(IIN)
-                    return redirect('sign_doc')
+                    return redirect('sign_doc', IIN=IIN)
                 else:
                     return render(request, 'register_contract.html', {'IIN': IIN, 'today': str(datetime.date.today()), 'picture': current_user.picture, 'name': current_user.name})
             else:
@@ -227,8 +227,13 @@ def contract(request, IIN):
         current_user = LMS_User.objects.get(user=request.user)
         student = Student.objects.get(IIN=IIN)
         contract = student.contract
-        return render(request, 'contract_card.html', {'contract': contract, 'IIN': IIN, 
-        'picture': current_user.picture, 'name': current_user.name})
+        dogovor_temp = contract.template_location
+        dogovor_temp = os.path.join('docs', dogovor_temp)
+        dogovor_sign = contract.signed_location
+        if dogovor_sign:
+            dogovor_sign = os.path.join('docs', dogovor_sign)
+        return render(request, 'contract_card.html', {'contract': contract, 'IIN': IIN, 'dogovor_temp': dogovor_temp,
+        'dogovor_sign': dogovor_sign,'picture': current_user.picture, 'name': current_user.name})
     else:
         messages.success(request, "You Must Be Logged In To View The Card")
         return redirect('login')
@@ -238,13 +243,16 @@ def sign_doc(request, IIN):
     name = current_user.name
     picture = current_user.picture
     new_student = Student.objects.get(IIN=IIN)
+    contract = new_student.contract
     folder_path = os.path.join(settings.STATIC_ROOT, 'docs')
-    dogovor = os.path.join('docs', 'dogovor'+new_student.contract.numb+'.docx')
+    dogovor = os.path.join('docs', new_student.contract.template_location)
     if request.method == "POST":
         for name, file in request.FILES.items():
             file = request.FILES.get(name)
             fs = FileSystemStorage(location=folder_path)
             fs.save(file.name, file)
+            contract.signed_location = (file.name)
+        contract.save()
         return redirect('home')
     else:
         return render(request, 'sign_doc.html', {'contract': new_student.contract.template_location, 'IIN': IIN,
@@ -338,8 +346,7 @@ def user_settings(request):
 
                 if 'avatar' in request.FILES:
                     new_avatar = request.FILES['avatar']
-                    folder_path = os.path.join(settings.BASE_DIR, 'user_manager', 'static', 'avatars')
-                    print(folder_path)
+                    folder_path = os.path.join(settings.STATIC_ROOT, 'avatars')
 
                     fs = FileSystemStorage(folder_path)
                     fs.save(new_avatar.name, new_avatar)

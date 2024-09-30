@@ -85,11 +85,21 @@ function populateTable() {
     counter = 1; //Обнулить counter
     if (gradeSelection=='Все классы'){
         students.forEach(function(student) {
-            addStudent(student);
+            if (student.status !== 'Лид'){
+                addStudent(student);
+            }
         });
-    } else{
+    }
+    else if (gradeSelection=='-') {
         students.forEach(function(student) {
-            if (student.grade == Grades_dict[gradeSelection]){
+            if ((student.status === 'Лид')){
+                addStudent(student);
+            }
+        });
+    }
+    else{
+        students.forEach(function(student) {
+            if ((student.grade === Grades_dict[gradeSelection]) && (student.status === 'Акт')){
                 addStudent(student);
             }
         });

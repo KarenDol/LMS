@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
 body {
     background: url(/static/background_10.jpg) no-repeat center/cover;
-    display: flex;
     justify-content: center;
     align-items: flex-start;
     height: 100vh;
@@ -31,6 +30,8 @@ body {
     height: auto;
   }
 .container {
+    margin: 50px auto;
+    margin-bottom: 100px;
     text-align: center;
     width: 100%;
     max-width: 500px;

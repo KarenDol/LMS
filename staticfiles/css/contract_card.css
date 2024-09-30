@@ -6,35 +6,35 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+
 body{
-    background-color: #dcdcdc;
+    background: url(/static/bg.jpg) no-repeat center/cover;
     align-items: center;
     justify-content: center;
 }
-
 .container{
     margin: 20px auto;
     display: flex;
     gap: 45px;
     background-color: #fff;
     width: 100%;
-    max-width: 1060px;
+    max-width: 960px;
     padding: 45px;
     border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 10px 10px 30px rgba(255, 255, 255, 0.1);
 }
 
-.container img{
+.container img {
     width: 50%;
     border-radius: 20px;
     object-fit: cover;
 }
 
-.container form{
+.container .contract-info{
     width: 50%;
 }
 
-form h2{
+.contract-info h2{
     text-align: center;
     margin-bottom: 30px;
     color: #100629;
@@ -61,11 +61,28 @@ form h2{
     border-radius: 10px;
     outline: none;
     transition: border 0.3s;
+    font-size: 1rem;
 }
 .form-control input:focus {
     border: 2px solid #59007A;
 }
+#fullcost {
+    padding-left: 25px;
+}
+#discount {
+    padding-left: 25px;
+}
+#monthly {
+    padding-left: 25px;
+}
+#joinfee {
+    padding-left: 25px;
+}
+.input-wrapper {
+    position: relative;
+}
 button{
+    margin-top: 15px;
     width: 100%;
     border: none;
     padding: 10px;
@@ -93,22 +110,22 @@ button:hover{
 
 .form-control.success input,
 .form-control.success textarea{
-    border-color: #2ecc71;
+    border-color: #29b864dc;
 }
 
 .form-control.success .icon{
-    color: #2ecc71;
+    color: #28bb65e3;
 }
 
 .form-control.error input,
 .form-control.error textarea{
-    border-color: #e74c3c;
+    border-color: #e74d3cb0;
 }
 
 .form-control.error .icon,
 .form-control.error input::placeholder,
 .form-control.error textarea::placeholder{
-    color: #e74c3c;
+    color: #e74d3cd2;
 }
 
 .modal {
@@ -121,7 +138,7 @@ button:hover{
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
-    animation: fadeIn 0.3s ease-in-out; /* Добавляем анимацию появления */
+    animation: fadeIn 0.3s ease-in-out; 
 }
 .modal-content {
     background-color: #fefefe;
@@ -132,7 +149,7 @@ button:hover{
     border: 1px solid #888;
     border-radius: 10px;
     text-align: center;
-    animation: slideIn 0.3s ease-in-out; /* Добавляем анимацию появления */
+    animation: slideIn 0.3s ease-in-out; 
 }
 
 @keyframes fadeIn {
@@ -173,15 +190,15 @@ button:hover{
     cursor: pointer;
 }
 
-
+/* Стили для селектора select-menu */
 .select-menu {
     position: relative;
     width: 100%;
     margin: 20px auto;
 }
 .select-menu .options-container {
-    overflow-y: auto; /* Включение вертикальной прокрутки */
-    border: 1px solid #ddd; /* Добавление рамки для контейнера */
+    overflow-y: auto; 
+    border: 1px solid #ddd; 
     border-radius: 8px;
 }
 .select-menu .select-btn {
@@ -202,12 +219,12 @@ button:hover{
     font-size: 12px;
     transition: transform 0.5s;
 }
+
 .select-menu.active .select-btn i {
     transform: rotate(-180deg);
 }
+
 .select-menu .options {
-    max-height: 250px;
-    overflow-y: auto;
     position: absolute;
     top: 100%;
     left: 0;
@@ -255,16 +272,135 @@ select {
     display: none;
 }
 textarea {
-    resize: vertical; /* Разрешить изменение размера только по горизонтали */
+    resize: vertical; 
 }
+::selection{
+    background: #7d2ae8;
+    color: #fff;
+    }
 @media screen and (max-width: 920px) {
-
+    
     .container img{
         display: none;
     }
 
-    .container form{
+    .container .contract-info{
         width: 100%;
     }
 
+}
+@media screen and (max-width: 600px) {
+    body {
+        padding: 15px 15px;
+    }
+    .container {
+        padding: 30px;
+    }
+}
+
+.input-div {
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    transition: border 0.3s;
+    font-size: 1rem;
+    background-color: #5050500c;
+}
+
+
+p.positive{
+    padding: .4rem 0;
+    border-radius: 2rem;
+    text-align: center;
+    background-color: #86e49d;
+    color: #006b21;
+    margin-left: auto;
+    min-width: 120px;
+}
+
+p.negative{
+    padding: .4rem 0;
+    border-radius: 2rem;
+    text-align: center;
+    background-color: #d893a3;
+    color: #b30021;
+    margin-left: auto;
+    min-width: 120px;
+}
+
+button.file{
+    width: 100%;
+}
+
+.label-status{
+    display: flex;   
+    gap: 1rem;
+    margin-bottom: 5px;
+    align-items: center;
+}
+
+.input-div-word {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    transition: border 0.3s;
+    font-size: 1rem;
+    background-color: #5050500c;
+    padding-left: 35px;
+    margin-bottom: 10px;
+}
+
+.input-div-word img.icon-w {
+    width: auto;
+    height: 20px;
+    border-radius: 0;
+    display: inline-block;
+    margin-right: 10px;
+    position: absolute;
+    left: 10px;
+    z-index: 1000;
+}
+
+.input-div-word a{
+    text-decoration: none;
+    color: #000000;
+}
+
+.input-div-pdf {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    transition: border 0.3s;
+    font-size: 1rem;
+    background-color: #5050500c;
+    padding-left: 35px;
+}
+
+.input-div-pdf img.icon-p {
+    width: auto;
+    height: 20px;
+    border-radius: 0;
+    display: inline-block;
+    margin-right: 10px;
+    position: absolute;
+    left: 14px;
+    z-index: 1000;
+}
+
+.input-div-pdf a{
+    text-decoration: none;
+    color: #000000;
 }

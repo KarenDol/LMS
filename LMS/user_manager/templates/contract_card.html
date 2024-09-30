@@ -61,12 +61,12 @@
                 </div>
                 <div class="input-div-word">
                     <img class='icon-w' src="{% static 'Word_icon.png' %}">
-                    <a href="{% static dogovor %}" download><p>Договор.docx</p></a>
+                    <a href="{% static dogovor_temp %}" download><p>Договор.docx</p></a>
                 </div>
                 {% if contract.status == 'Под' %}
                 <div class="input-div-pdf">
                     <img class='icon-p' src="{% static 'PDF_icon.png' %}">
-                    <a href="{% static dogovor %}" download><p>Договор.pdf</p></a>
+                    <a href="{% static dogovor_sign %}" download><p>Договор.pdf</p></a>
                 </div>
                 {% endif %}
 

@@ -12,9 +12,7 @@ header {
     align-items: center;
     width: 100%;
     height: auto;
-    position: fixed;
     top: 0;
-    z-index: 1000;
     justify-content: space-between;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
 }
@@ -33,18 +31,15 @@ header {
     position: right;
 }
 
-.AIS .AIS-Logo{
+.AIS img{
     margin-right: 10px;
+    height: 50px;
+    width: auto;
+    margin-top: 5px;
 }
 
 .AIS-Text p{
     margin: 0px;
-}
-
-.AIS-Logo img{
-    height: 50px;
-    width: auto;
-    margin-top: 5px;
 }
 
 a{
@@ -61,9 +56,24 @@ a{
     align-items: center;
 }
 
-.Person .Avatar img{
+.Person img{
     border-radius: 50%;
-    height: 30px;
-    width: auto;
+    height: 40px;
+    width: 40px;
     margin-left: 10px;
+    object-fit: cover;
+}
+
+
+.spin {
+    animation: spin 2s linear forwards;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
