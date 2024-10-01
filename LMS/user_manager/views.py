@@ -18,19 +18,37 @@ from django.http import JsonResponse
 
 # Create your views here.
 def home(request):
+    render_dict=user_auth(request)
+    students = list(Student.objects.all().values('Last_Name', 'First_Name', 'Patronim', 'IIN', 'phone', 'grade', 'status'))
+    students_json = json.dumps(students)
+    render_dict['students'] = students_json
+    Grades_dict_json = json.dumps(Grades_dict)
+    render_dict['Grades_dict'] = Grades_dict_json
+    render_dict['Grades'] = Grades_home
+    return render(request, 'home.html', render_dict)
+
+#Fetch all user info
+def user_auth(request):
     if request.user.is_authenticated:
         try:
             current_user = LMS_User.objects.get(user=request.user)
-            students = list(Student.objects.all().values('Last_Name', 'First_Name', 'Patronim', 'IIN', 'phone', 'grade', 'status'))
-            students_json = json.dumps(students)
-            Grades_dict_json = json.dumps(Grades_dict)
-            return render(request, 'home.html', {'Grades_dict': Grades_dict_json, 'role': 'admin', 'students_1': students_json, 'Grades': Grades_home, 'picture': current_user.picture, 'name': current_user.name})
+            render_dict = {'picture': current_user.picture, 'name': current_user.name}
+            return render_dict
         except LMS_User.DoesNotExist:
+            messages.error(request, "User is not LMS User")
             return redirect('logout')
-
     else:
-        messages.success(request, "Login in to access that page")
-        return redirect('login_user')
+        messages.error(request, "Login to access that page")
+        return redirect('login')
+
+#Check if student exists or not    
+def student_exist(IIN):
+    try:
+        new_student = Student.objects.get(IIN=IIN)
+        return new_student
+    except Student.DoesNotExist:
+        return redirect('home')
+
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -55,109 +73,106 @@ def logout_user(request):
     return redirect('home')
 
 def register_student(request):
-    if request.user.is_authenticated:
-        try:
-            current_user = LMS_User.objects.get(user=request.user)
-            if current_user.user_type == 'ВнСв':
-                if request.method == "POST":
-                    lastname = request.POST['lastname']
-                    firstname = request.POST['firstname']
-                    patronim = request.POST['patronim']
-                    birthdate = request.POST['birthdate']
-                    IIN = request.POST['IIN']
-                    grade = Grades_dict[request.POST['grade']]
-                    nationality = request.POST['nationality']
-                    prev_school = request.POST['prev_school']                
-                    phone = request.POST['phone']
-                    comment = request.POST['comment']
-                    new_user = User(username=IIN, first_name=firstname)
-                    new_user.set_password("AIS@100")
-                    new_user.save()
-                    new_student = Student(user=new_user, Last_Name=lastname, First_Name=firstname, Patronim=patronim, phone=phone,
-                                birthdate=birthdate, IIN=IIN, prev_school=prev_school, grade=grade, nationality=nationality,
-                                comment=comment)
-                    new_student.save()
-                    messages.success(request, "New Student Has Been Added")
-                    return redirect('register_parent', IIN=new_student.IIN)
-                else:
-                    return render(request, 'register_student.html', {'Grades': Grades, 'picture': current_user.picture, 'name': current_user.name})
-            else:
-                return redirect('home')
-        except LMS_User.DoesNotExist:
-            return redirect('home')
+    render_dict=user_auth(request)
+    current_user = LMS_User.objects.get(user=request.user)
+    if current_user.user_type == 'ВнСв':
+        if request.method == "POST":
+            lastname = request.POST['lastname']
+            firstname = request.POST['firstname']
+            patronim = request.POST['patronim']
+            birthdate = request.POST['birthdate']
+            IIN = request.POST['IIN']
+            grade = Grades_dict[request.POST['grade']]
+            nationality = request.POST['nationality']
+            prev_school = request.POST['prev_school']                
+            phone = request.POST['phone']
+            comment = request.POST['comment']
+            new_user = User(username=IIN, first_name=firstname)
+            new_user.set_password("AIS@100")
+            new_user.save()
+            new_student = Student(user=new_user, Last_Name=lastname, First_Name=firstname, Patronim=patronim, phone=phone,
+                            birthdate=birthdate, IIN=IIN, prev_school=prev_school, grade=grade, nationality=nationality,
+                            comment=comment)
+            new_student.save()
+            messages.success(request, "New Student Has Been Added")
+            return redirect('register_parent', IIN=new_student.IIN)
+        else:
+                return render(request, 'register_student.html', render_dict)
     else:
-        return redirect('login')
+        messages.success(request, "Only ВнСв can add new students")
+        return redirect('home')
+
 
 def register_parent(request, IIN):
-    if request.user.is_authenticated:
-        try:
-            current_user = LMS_User.objects.get(user=request.user)
-            if current_user.user_type == 'ВнСв':
-                if request.method == 'POST':
-                    First_Name = request.POST['firstname']
-                    Last_Name = request.POST['lastname']                
-                    Patronim = request.POST['patronim']
-                    Phone = request.POST['phone']
-                    ID_number = request.POST['ID_number']
-                    new_user = User(username="parent_" + ID_number, first_name=First_Name)
-                    new_user.set_password("AIS@100")
-                    new_user.save()
-                    ID_org = request.POST['ID_org']
-                    ID_date = request.POST['ID_date']
-                    Place = request.POST['workplace']
-                    Position = request.POST['position']
-                    address = request.POST['address']
-                    new_parent = Parent(user=new_user, First_Name=First_Name, Last_Name=Last_Name, Patronim=Patronim,
-                                Phone=Phone, ID_number=ID_number, ID_org=ID_org, ID_date=ID_date,
-                                Working_Place=Place, Position=Position, Address=address)
-                    new_parent.save()
-                    new_student = Student.objects.get(IIN=IIN)
-                    new_student.parent_1 = new_parent
-                    new_student.save()
-                    return redirect('register_contract', IIN=IIN)            
-                else:
-                    return render(request, 'register_parent.html', {'IIN': IIN, 'picture': current_user.picture, 'name': current_user.name})
-            else:
-                return redirect('home')
-        except LMS_User.DoesNotExist:
-            return redirect('home')
+    render_dict=user_auth(request)
+    new_student = student_exist(IIN)
+    if (new_student.parent_1): #If parent already exists
+        messages.error(request, "Parent Already Exists")
+        return redirect('home')
+    current_user = LMS_User.objects.get(user=request.user)
+    if current_user.user_type == 'ВнСв':
+        if request.method == 'POST':
+            First_Name = request.POST['firstname']
+            Last_Name = request.POST['lastname']                
+            Patronim = request.POST['patronim']
+            Phone = request.POST['phone']
+            ID_number = request.POST['ID_number']
+            new_user = User(username="parent_" + ID_number, first_name=First_Name)
+            new_user.set_password("AIS@100")
+            new_user.save()
+            ID_org = request.POST['ID_org']
+            ID_date = request.POST['ID_date']
+            Place = request.POST['workplace']
+            Position = request.POST['position']
+            address = request.POST['address']
+            new_parent = Parent(user=new_user, First_Name=First_Name, Last_Name=Last_Name, Patronim=Patronim,
+                        Phone=Phone, ID_number=ID_number, ID_org=ID_org, ID_date=ID_date,
+                        Working_Place=Place, Position=Position, Address=address)
+            new_parent.save()
+            new_student.parent_1 = new_parent
+            new_student.save()
+            return redirect('register_contract', IIN=IIN)            
+        else:
+            render_dict['IIN'] = IIN
+            return render(request, 'register_parent.html', render_dict)
     else:
-        messages.success(request, "Login it as a curator to access that page")
-        return redirect('login')
+        messages.success(request, "Only ВнСв can add new students")
+        return redirect('home')
 
 def register_contract(request, IIN):
-    if request.user.is_authenticated:
-        try:
-            current_user = LMS_User.objects.get(user=request.user)
-            if current_user.user_type == 'ВнСв':
-                if request.method == 'POST':
-                    date = str(datetime.datetime.now())
-                    numb = date[2:4] + date[5:7] + date[8:10] + date[11:13] + date[14:16] + date[17:19]
-                    sign_date = request.POST['sign_date']
-                    first_date = request.POST['first_date']
-                    last_date = request.POST['last_date']
-                    total = request.POST['total']
-                    discount = request.POST['discount']
-                    monthly = request.POST['monthly']
-                    join_fee = request.POST['join_fee']
-                    new_student = Student.objects.get(IIN=IIN)
-                    new_contract = Contract(numb=numb, sign_date=sign_date, first_date=first_date, last_date=last_date,
+    render_dict=user_auth(request)
+    new_student = student_exist(IIN)
+    current_user = LMS_User.objects.get(user=request.user)
+    if (new_student.contract): #If contract already exists
+        messages.error(request, "Contract Already Exists")
+        return redirect('home')
+    if current_user.user_type == 'ВнСв':
+        if request.method == 'POST':
+            date = str(datetime.datetime.now())
+            numb = date[2:4] + date[5:7] + date[8:10] + date[11:13] + date[14:16] + date[17:19]
+            sign_date = request.POST['sign_date']
+            first_date = request.POST['first_date']
+            last_date = request.POST['last_date']
+            total = request.POST['total']
+            discount = request.POST['discount']
+            monthly = request.POST['monthly']
+            join_fee = request.POST['join_fee']
+            new_student = Student.objects.get(IIN=IIN)
+            new_contract = Contract(numb=numb, sign_date=sign_date, first_date=first_date, last_date=last_date,
                                     total=total, discount=discount, monthly=monthly, join_fee=join_fee,
                                     template_location='dogovor' + str(numb) + '.pdf')
-                    new_contract.save()
-                    new_student.contract = new_contract
-                    new_student.status = 'Акт'
-                    new_student.save()
-                    fill_doc(IIN)
-                    return redirect('sign_doc', IIN=IIN)
-                else:
-                    return render(request, 'register_contract.html', {'IIN': IIN, 'today': str(datetime.date.today()), 'picture': current_user.picture, 'name': current_user.name})
-            else:
-                return redirect('home')
-        except LMS_User.DoesNotExist:
-            return redirect('home')
+            new_contract.save()
+            new_student.contract = new_contract
+            new_student.status = 'Акт'
+            new_student.save()
+            fill_doc(IIN)
+            return redirect('sign_doc', IIN=IIN)
+        else:
+            render_dict['IIN'] = IIN
+            render_dict['today'] = str(datetime.date.today())
+            return render(request, 'register_contract.html', render_dict)
     else:
-        messages.success(request, "Login it to access that page")
+        messages.success(request, "Only ВнСв can add new students")
         return redirect('home')
 
 
@@ -204,48 +219,39 @@ def delete_student(request, pk):
     return redirect('home')
 
 def student(request, IIN):
-    if request.user.is_authenticated:
-        current_user = LMS_User.objects.get(user=request.user)
-        student = Student.objects.get(IIN=IIN)
-        return render(request, 'student_card.html', {'student': student, 'picture': current_user.picture, 'name': current_user.name})
-    else:
-        messages.success(request, "You Must Be Logged In To View The Card")
-        return redirect('login')
+    render_dict=user_auth(request)
+    student = student_exist(IIN)
+    render_dict['student'] = student
+    return render(request, 'student_card.html', render_dict)
 
 def parent_card(request, IIN):
-    if request.user.is_authenticated:
-        current_user = LMS_User.objects.get(user=request.user)
-        student = Student.objects.get(IIN=IIN)
-        parent = student.parent_1
-        return render(request, 'parent_card.html', {'parent': parent, 'picture': current_user.picture, 'name': current_user.name})
-    else:
-        messages.success(request, "You Must Be Logged In To View The Card")
-        return redirect('login')
+    render_dict=user_auth(request)
+    student = student_exist(IIN)
+    parent = student.parent_1
+    render_dict['parent'] = parent
+    return render(request, 'parent_card.html', render_dict)
 
 def contract(request, IIN):
-    if request.user.is_authenticated:
-        current_user = LMS_User.objects.get(user=request.user)
-        student = Student.objects.get(IIN=IIN)
-        contract = student.contract
-        dogovor_temp = contract.template_location
-        dogovor_temp = os.path.join('docs', dogovor_temp)
-        dogovor_sign = contract.signed_location
-        if dogovor_sign:
-            dogovor_sign = os.path.join('docs', dogovor_sign)
-        return render(request, 'contract_card.html', {'contract': contract, 'IIN': IIN, 'dogovor_temp': dogovor_temp,
-        'dogovor_sign': dogovor_sign,'picture': current_user.picture, 'name': current_user.name})
-    else:
-        messages.success(request, "You Must Be Logged In To View The Card")
-        return redirect('login')
+    render_dict=user_auth(request)
+    student = student_exist(IIN)
+    contract = student.contract
+    render_dict['contract'] = contract
+    dogovor_temp = contract.template_location
+    dogovor_temp = os.path.join('docs', dogovor_temp)
+    render_dict['dogovor_temp'] = dogovor_temp
+    dogovor_sign = contract.signed_location
+    if dogovor_sign:
+        dogovor_sign = os.path.join('docs', dogovor_sign)
+        render_dict['dogovor_sign'] = dogovor_sign
+    render_dict['IIN'] = IIN
+    return render(request, 'contract_card.html', render_dict)
 
 def sign_doc(request, IIN):
-    current_user = LMS_User.objects.get(user=request.user)
-    name = current_user.name
-    picture = current_user.picture
-    new_student = Student.objects.get(IIN=IIN)
+    render_dict=user_auth(request)
+    student = student_exist(IIN)
     contract = new_student.contract
+    dogovor = os.path.join('docs', contract.template_location)
     folder_path = os.path.join(settings.STATIC_ROOT, 'docs')
-    dogovor = os.path.join('docs', new_student.contract.template_location)
     if request.method == "POST":
         for name, file in request.FILES.items():
             file = request.FILES.get(name)
@@ -255,8 +261,10 @@ def sign_doc(request, IIN):
         contract.save()
         return redirect('home')
     else:
-        return render(request, 'sign_doc.html', {'contract': new_student.contract.template_location, 'IIN': IIN,
-                                                 'name': name, 'picture': picture, 'dogovor': dogovor})
+        render_dict['contract'] = contract
+        render_dict['IIN'] = IIN
+        render_dict['dogovor'] = dogovor
+        return render(request, 'sign_doc.html', render_dict)
 
 def finance(request):
     if request.user.is_authenticated:
