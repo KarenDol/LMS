@@ -18,23 +18,21 @@
                 </div>
             </div>
             <div class="Person">
-                <p>{{ name }}</p>
+                <p id="name">{{ name }}</p>
                 <a href="{% url 'user_settings' %}">
-                    <img src="{% static picture %}" id="profilePicture">
+                    <img id="picture">
                 </a>
             </div>
     </header>
     <script>
-        const profilePicture = document.getElementById('profilePicture');
-
-        setInterval(() => {
-            profilePicture.src = "{% static 'Gear.jpg' %}";
-            profilePicture.classList.add('spin'); 
-            setTimeout(() => {
-                profilePicture.classList.remove('spin');
-                profilePicture.src = "{% static picture %}";
-            }, 2000); // Wait for the spin animation to finish (1 second)
-        }, 10000); // Repeat every 10 seconds
+        fetch('{% url "get_user_info" %}')
+        .then(response => response.json())
+        .then(data => {
+            // Update the HTML with the fetched data
+            document.getElementById('name').textContent = data.name;
+            document.getElementById('picture').src = '/api/serve_static/' + data.picture;
+        })
+        .catch(error => console.error('Error fetching user info:', error));
     </script>
     {% block content %}
     {% endblock %}
