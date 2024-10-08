@@ -1,14 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     const form = document.getElementById('mainForm');
-    const name = document.getElementById('name');
+    const lastname = document.getElementById('lastname');
     const firstname = document.getElementById('firstname');
     const patronim = document.getElementById('patronim');
     const nationality = document.getElementById('nationality');
     const prev_school = document.getElementById('prev_school');
     const iin = document.getElementById('iin');
     const phone = document.getElementById('phone');
-    const password = document.getElementById('password');
     const message = document.getElementById('message');
 
     form.addEventListener('submit', function (e) {
@@ -18,8 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    name.addEventListener('input', () => {
-        validateField(name, name.value.trim() !== '', 'Заполните фамилию ученика');
+    lastname.addEventListener('input', () => {
+        validateField(lastname, lastname.value.trim() !== '', 'Заполните фамилию ученика');
     });
 
     firstname.addEventListener('input', () => {
@@ -52,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function checkInputs() {
         let isValid = true;
-        validateField(name, name.value.trim() !== '', 'Это поле не может быть пустым');
+        validateField(lastname, lastname.value.trim() !== '', 'Это поле не может быть пустым');
         validateField(firstname, firstname.value.trim() !== '', 'Это поле не может быть пустым');
         validateField(patronim, patronim.value.trim() !== '', 'Это поле не может быть пустым');
         validateField(nationality, nationality.value.trim() !== '', 'Это поле не может быть пустым');

@@ -122,7 +122,10 @@ def register_student(request):
             messages.success(request, "New Student Has Been Added")
             return redirect('register_parent', IIN=new_student.IIN)
         else:
-                return render(request, 'register_student.html')
+            context = {
+                'Grades': Grades
+            }
+            return render(request, 'register_student.html', context)
     else:
         messages.success(request, "Only ВнСв can add new students")
         return redirect('home')
