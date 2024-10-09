@@ -14,7 +14,6 @@ from .dogovor import fill_doc
 from .const import Grades, Grades_dict, Grades_home, User_type_dict
 import json
 import os
-import json
 from django.http import JsonResponse
 
 # Create your views here.
@@ -50,10 +49,32 @@ def user_auth(request):
 #Check if student exists or not    
 def student_exist(IIN):
     try:
-        new_student = Student.objects.get(IIN=IIN)
-        return new_student
+        student = Student.objects.get(IIN=IIN)
+        return True
     except Student.DoesNotExist:
-        return redirect('home')
+        return False
+
+def parent_exist(IIN):
+    if student_exist(IIN):
+        student = Student.objects.get(IIN=IIN)
+        parent = student.parent_1
+        if parent:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def contract_exist(IIN):
+    if parent_exist(IIN):
+        student = Student.objects.get(IIN=IIN)
+        contract = student.contract
+        if contract:
+            return True
+        else:
+            return False
+    else:
+        return False
 
 #Fetch the name and the picture of the user for the index.html
 def get_user_info(request):
@@ -112,6 +133,10 @@ def register_student(request):
             prev_school = request.POST['prev_school']                
             phone = request.POST['phone']
             comment = request.POST['comment']
+
+            #Check if student already exists
+            if student_exist(IIN):
+                return redirect('error', error_code='Ученик c таким ИИН уже добавлен в систему')
             new_user = User(username=IIN, first_name=firstname)
             new_user.set_password("AIS@100")
             new_user.save()
@@ -134,10 +159,12 @@ def register_student(request):
 def register_parent(request, IIN):
     if (not user_auth(request)):
         return redirect('logout')
-    new_student = student_exist(IIN)
-    if (new_student.parent_1): #If parent already exists
-        messages.error(request, "Parent Already Exists")
-        return redirect('home')
+    if student_exist(IIN):
+        new_student = Student.objects.get(IIN=IIN)
+    else:
+        return redirect('error', error_code='Ученика с таким ИИН нет в системе')
+    if parent_exist(IIN): #If parent already exists
+        return redirect('error', error_code='Родитель данного ученика уже добавлен в систему')
     current_user = LMS_User.objects.get(user=request.user)
     if current_user.user_type == 'ВнСв':
         if request.method == 'POST':
@@ -173,11 +200,13 @@ def register_parent(request, IIN):
 def register_contract(request, IIN):
     if (not user_auth(request)):
         return redirect('logout')
-    new_student = student_exist(IIN)
+    if parent_exist(IIN):
+        new_student = Student.objects.get(IIN=IIN)
+    else:
+        return redirect('error', "Сначала убедитесь, что студент и родитель добавлены в систему")
     current_user = LMS_User.objects.get(user=request.user)
-    if (new_student.contract): #If contract already exists
-        messages.error(request, "Contract Already Exists")
-        return redirect('home')
+    if contract_exist(IIN): #If contract already exists
+        return redirect('error', error_code='Договор для данного ученика уже составлен')
     if current_user.user_type == 'ВнСв':
         if request.method == 'POST':
             date = str(datetime.datetime.now())
@@ -252,10 +281,13 @@ def delete_student(request, pk):
         messages.success(request, "You Must Be Logged In To Delete The Record")
     return redirect('home')
 
-def student(request, IIN):
+def student_card(request, IIN):
     if (not user_auth(request)):
         return redirect('logout')
-    student = student_exist(IIN)
+    if student_exist(IIN):
+        student = Student.objects.get(IIN=IIN)
+    else:
+        return redirect('error', error_code='Похоже. что ученика с таким ИИН нет в системе')
     context = {
         'student': student,
     }
@@ -264,17 +296,23 @@ def student(request, IIN):
 def parent_card(request, IIN):
     if (not user_auth(request)):
         return redirect('logout')
-    student = student_exist(IIN)
+    if parent_exist(IIN):
+        student = Student.objects.get(IIN=IIN)
+    else:
+        return redirect('error', error_code='Похоже. что родитель данного ученика еще не добавлен в систему')
     parent = student.parent_1
     context = {
         'parent': parent,
     }
     return render(request, 'parent_card.html', context)
 
-def contract(request, IIN):
+def contract_card(request, IIN):
     if (not user_auth(request)):
         return redirect('logout')
-    student = student_exist(IIN)
+    if contract_exist(IIN):
+        student = Student.objects.get(IIN=IIN)
+    else:
+        return redirect('error', error_code='Похоже. что данного договора нет')
     contract = student.contract
     dogovor_temp = contract.template_location
     dogovor_temp = os.path.join('docs', dogovor_temp)
@@ -425,3 +463,6 @@ def user_settings(request):
             return render(request, 'user_settings.html', {'user_dict': user_dict})
     else:
         return redirect('login')
+    
+def error(request, error_code):
+    return render(request, '404.html', {'error_code': error_code})

@@ -25,13 +25,14 @@ urlpatterns = [
     path("logout/", views.logout_user, name='logout'),
     path('delete_student/<int:pk>/', views.delete_student, name='delete_student'),
     # path('reset_password/<int:pk>', views.reset_password, name='reset_password'),
-    path('student/<IIN>/', views.student, name='student'),
+    path('student_card/<IIN>/', views.student_card, name='student_card'),
     path('parent_card/<IIN>/', views.parent_card, name='parent_card'),
-    path('contract/<IIN>/', views.contract, name='contract'),
+    path('contract_card/<IIN>/', views.contract_card, name='contract_card'),
     path('sign_doc/<IIN>/', views.sign_doc, name='sign_doc'),
     path('finance/', views.finance, name='finance'),
     path('cash/<int:entr_id>/', views.cash, name='cash'),
     path('user_settings/', views.user_settings, name='user_settings'),
+    path('404/<error_code>', views.error, name='error'),
 
     #API urls
     path('api/user-info/', views.get_user_info, name='get_user_info'),

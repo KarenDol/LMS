@@ -13,7 +13,7 @@
 
 <body>
     <div class="container">
-        <img src="{% static 'student_pic.png' %}">
+        <img src="{% static 'student_pic.jpg' %}">
         <div class="student_info">
             <h2>Карточка Ученика</h2>
 
@@ -28,11 +28,11 @@
                 {% else %}
                     {% if student.contract != None %}
                         {% if student.contract.status == 'НеПод' %}
-                            <button  class="sign-button" onclick="window.location.href='{% url 'contract' IIN=student.IIN %}'">
+                            <button  class="sign-button" onclick="window.location.href='{% url 'contract_card' IIN=student.IIN %}'">
                                 📝 Договор
                             </button>
                         {% else %}
-                            <button  class="view-button" onclick="window.location.href='{% url 'contract' IIN=student.IIN %}'">
+                            <button  class="view-button" onclick="window.location.href='{% url 'contract_card' IIN=student.IIN %}'">
                                 📝 Договор
                             </button>
                         {% endif %}

@@ -13,7 +13,7 @@
 
 <body>
     <div class="container">
-        <img src="{% static 'student_pic.png' %}">
+        <img src="{% static 'student_pic.jpg' %}">
         <form id="mainForm" method="POST" action="{% url 'register_student' %}" novalidate>
             {% csrf_token %}
             <h2>Регистрация ученика</h2>
@@ -31,7 +31,7 @@
 
             <div class="form-control">
                 <label for="patronim">Отчество</label>
-                <input type="text" id="patronim" name="patronim" placeholder="Введите отчество ученика" autocomplete="off">
+                <input type="text" id="patronim" name="patronim" placeholder="Заполните или оставьте пустым, если отсутствует" autocomplete="off">
                 <i class="icon"></i>
             </div>
 
@@ -62,19 +62,6 @@
                 <input type="tel" id="iin" name="IIN" inputmode="numeric" placeholder="ИИН ученика (12 символов)" maxlength="12" autocomplete="off">
                 <i class="icon"></i>
             </div>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const iinInput = document.getElementById('iin');
-
-                    iinInput.addEventListener('keypress', function (event) {
-                        const charCode = event.which ? event.which : event.keyCode;
-                        if (charCode < 48 || charCode > 57) {
-                            event.preventDefault();
-                        }
-                    });
-                });
-            </script>
 
             <div class="form-control">
                 <label for="phone">Номер Телефона</label>

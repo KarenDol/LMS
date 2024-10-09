@@ -31,7 +31,7 @@
 
             <div class="form-control">
                 <label for="patronim">Отчество</label>
-                <input type="text" id="patronim" name="patronim" placeholder="Введите имя родителя" autocomplete="off">
+                <input type="text" id="patronim" name="patronim" placeholder="Заполните или оставьте пустым, если отсутствует" autocomplete="off">
                 <i class="icon"></i>
             </div>
 
@@ -48,23 +48,10 @@
             </div>
 
             <div class="form-control">
-                <label for="iin">Номер удостоверения</label>
-                <input type="tel" id="iin" name="ID_number" inputmode="numeric" placeholder="Номер удостоверения (7 символов)" maxlength="7" autocomplete="off">
+                <label for="ID_numb">Номер удостоверения</label>
+                <input type="tel" id="ID_numb" name="ID_number" inputmode="numeric" placeholder="Номер удостоверения (9 символов)" maxlength="9" autocomplete="off">
                 <i class="icon"></i>
             </div>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const iinInput = document.getElementById('iin');
-            
-                    iinInput.addEventListener('keypress', function (event) {
-                        const charCode = event.which ? event.which : event.keyCode;
-                        if (charCode < 48 || charCode > 57) {
-                            event.preventDefault();
-                        }
-                    });
-                });
-            </script>
 
             <div class="form-control">
                 <label for="mvd">Кем был выдан</label>
@@ -103,7 +90,7 @@
     </div>
 
 
-    <script src="{% static 'js/script_parent.js' %}"></script>
+    <script src="{% static 'js/register_parent.js' %}"></script>
     <script src="https://unpkg.com/imask"></script>
 </body>
 {% endblock content %}

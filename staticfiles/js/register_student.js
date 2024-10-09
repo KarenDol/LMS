@@ -18,18 +18,21 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     lastname.addEventListener('input', () => {
+        lastname.value = lastname.value.replace(/[^a-zA-Zа-яА-ЯёЁәңғүұқөһӘҢҒҮҰҚӨҺ-]/g, '');
         validateField(lastname, lastname.value.trim() !== '', 'Заполните фамилию ученика');
     });
 
     firstname.addEventListener('input', () => {
+        firstname.value = firstname.value.replace(/[^a-zA-Zа-яА-ЯёЁәңғүұқөһӘҢҒҮҰҚӨҺ-]/g, '');
         validateField(firstname, firstname.value.trim() !== '', 'Заполните имя ученика');
     });
 
     patronim.addEventListener('input', () => {
-        validateField(patronim, patronim.value.trim() !== '', 'Заполните отчество ученика');
+        patronim.value = patronim.value.replace(/[^a-zA-Zа-яА-ЯёЁәңғүұқөһӘҢҒҮҰҚӨҺ-]/g, '');
     });
 
     nationality.addEventListener('input', () => {
+        nationality.value = nationality.value.replace(/[^a-zA-Zа-яА-ЯёЁәңғүұқөһӘҢҒҮҰҚӨҺ-]/g, '');
         validateField(nationality, nationality.value.trim() !== '', 'Заполните национальность ученика');
     });
 
@@ -38,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     iin.addEventListener('input', () => {
+        iin.value = iin.value.replace(/[^0-9]/g, '');
         validateIIN(iin);
     });
 
@@ -53,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let isValid = true;
         validateField(lastname, lastname.value.trim() !== '', 'Это поле не может быть пустым');
         validateField(firstname, firstname.value.trim() !== '', 'Это поле не может быть пустым');
-        validateField(patronim, patronim.value.trim() !== '', 'Это поле не может быть пустым');
+        validateField(patronim, true, ''); //Allow no patronim
         validateField(nationality, nationality.value.trim() !== '', 'Это поле не может быть пустым');
         validateField(prev_school, prev_school.value.trim() !== '', 'Это поле не может быть пустым');
         validateIIN(iin);

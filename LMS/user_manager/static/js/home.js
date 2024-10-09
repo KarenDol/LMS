@@ -112,7 +112,7 @@ function addStudent(student){
     var tr = document.createElement('tr');
     tr.innerHTML = `
         <td>${counter}</td>
-        <td><a href="/student/${student.IIN}/">${student.Last_Name}</td>
+        <td><a href="/student_card/${student.IIN}/">${student.Last_Name}</td>
         <td>${student.First_Name}</td>
         <td>${student.Patronim}</td>
         <td>${student.IIN}</td>
